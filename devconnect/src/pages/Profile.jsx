@@ -1,346 +1,195 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  User, 
-  MapPin, 
-  Link as LinkIcon, 
-  Calendar, 
-  Github, 
-  Twitter, 
-  Linkedin,
-  Mail,
-  Briefcase,
-  Code2,
-  Star,
-  GitFork,
-  Eye
+  MapPin, Link as LinkIcon, Calendar, Github, Twitter, Linkedin, Mail, Briefcase,
+  Code2, Star, GitFork, Eye, Award, BarChart2, Activity
 } from 'lucide-react';
 import { useParams } from 'react-router-dom';
-import Sidebar from '../layout/Sidebar';
-import Topbar from '../layout/Topbar';
+import MainLayout from '../components/layout/MainLayout';
+import Button from '../components/ui/Button';
+
+// Mock data for profile page
+const profileData = {
+  name: 'Sarah Chen',
+  username: '@sarahchen',
+  bio: 'Senior Frontend Developer passionate about React, TypeScript, and building beautiful, accessible user experiences. Open source contributor and tech enthusiast.',
+  location: 'San Francisco, CA',
+  website: 'sarahchen.dev',
+  joinedDate: 'March 2023',
+  role: 'Senior Frontend Developer at TechCorp',
+  avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face',
+  coverImage: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&h=400&fit=crop',
+  stats: { posts: 156, followers: '2.8k', following: 892 },
+  skills: ['React', 'TypeScript', 'Node.js', 'GraphQL', 'Tailwind CSS', 'Next.js', 'AWS', 'Figma'],
+  socialLinks: { github: 'sarahchen', twitter: 'sarahchen_dev', linkedin: 'sarahchen' },
+  xp: { current: 750, max: 1000, level: 12 }
+};
 
 const Profile = () => {
-  const { id } = useParams();
+  const { id } = useParams(); // In a real app, you'd fetch data based on this ID
   const [activeTab, setActiveTab] = useState('posts');
   const [isFollowing, setIsFollowing] = useState(false);
 
-  const profileData = {
-    name: 'Sarah Chen',
-    username: '@sarahchen',
-    bio: 'Senior Frontend Developer passionate about React, TypeScript, and building beautiful user experiences. Open source contributor and tech enthusiast.',
-    location: 'San Francisco, CA',
-    website: 'sarahchen.dev',
-    joinedDate: 'March 2023',
-    role: 'Senior Frontend Developer',
-    company: 'TechCorp Inc.',
-    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
-    coverImage: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&h=300&fit=crop',
-    stats: {
-      posts: 156,
-      followers: 2847,
-      following: 892,
-      projects: 24
-    },
-    skills: ['React', 'TypeScript', 'Node.js', 'GraphQL', 'Tailwind CSS', 'Next.js', 'AWS'],
-    socialLinks: {
-      github: 'sarahchen',
-      twitter: 'sarahchen_dev',
-      linkedin: 'sarahchen',
-      email: 'hello@sarahchen.dev'
-    }
+  const tabContent = {
+    posts: <div className="text-text-dark">Posts from this user would be displayed here.</div>,
+    projects: <div className="text-text-dark">A gallery of the user's projects would be shown here.</div>,
+    about: <p className="text-text-light leading-relaxed">{profileData.bio}</p>
   };
 
-  const posts = [
-    {
-      id: 1,
-      content: 'Just released a new React hook library! 🎉 Check it out for better state management and performance optimization.',
-      timestamp: '2 hours ago',
-      likes: 89,
-      comments: 12,
-      tags: ['react', 'library', 'opensource']
-    },
-    {
-      id: 2,
-      content: 'Working on implementing dark mode with Tailwind CSS. The new JIT compiler makes it so much easier!',
-      timestamp: '1 day ago',
-      likes: 156,
-      comments: 23,
-      tags: ['tailwind', 'css', 'darkmode']
-    }
-  ];
-
-  const projects = [
-    {
-      id: 1,
-      name: 'React UI Kit',
-      description: 'A comprehensive React component library with TypeScript support',
-      stars: 1234,
-      forks: 234,
-      language: 'TypeScript',
-      url: 'https://github.com/sarahchen/react-ui-kit'
-    },
-    {
-      id: 2,
-      name: 'DevTools Extension',
-      description: 'Browser extension for debugging React applications',
-      stars: 567,
-      forks: 89,
-      language: 'JavaScript',
-      url: 'https://github.com/sarahchen/devtools-extension'
-    }
-  ];
-
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
-      <Topbar />
-      <Sidebar />
-      
-      <main className="ml-64 pt-16">
+    <MainLayout>
+      <div className="max-w-6xl mx-auto py-8 px-4">
         {/* Cover Image */}
-        <div 
-          className="h-64 bg-cover bg-center"
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="h-64 rounded-2xl bg-cover bg-center mb-[-8rem] shadow-lg"
           style={{ backgroundImage: `url(${profileData.coverImage})` }}
         />
 
-        <div className="max-w-6xl mx-auto px-4">
-          {/* Profile Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-6 -mt-20 relative"
-          >
-            <div className="flex items-end space-x-6">
-              <img
-                src={profileData.avatar}
-                alt={profileData.name}
-                className="w-32 h-32 rounded-full border-4 border-white dark:border-slate-800"
-              />
-              <div className="flex-1">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">
-                      {profileData.name}
-                    </h1>
-                    <p className="text-slate-600 dark:text-slate-400">{profileData.username}</p>
-                  </div>
-                  <div className="flex space-x-3">
-                    <button
-                      onClick={() => setIsFollowing(!isFollowing)}
-                      className={`px-6 py-2 rounded-lg font-medium transition-colors ${
-                        isFollowing
-                          ? 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-600'
-                          : 'bg-blue-600 text-white hover:bg-blue-700'
-                      }`}
-                    >
-                      {isFollowing ? 'Following' : 'Follow'}
-                    </button>
-                    <button className="px-6 py-2 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
-                      Message
-                    </button>
-                  </div>
-                </div>
-              </div>
+        {/* Profile Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="relative glass-card p-6 rounded-2xl shadow-soft"
+        >
+          <div className="flex flex-col md:flex-row items-center md:items-end space-y-4 md:space-y-0 md:space-x-6">
+            <img
+              src={profileData.avatar}
+              alt={profileData.name}
+              className="w-40 h-40 rounded-full border-4 border-dark-border -mt-24 md:-mt-20 object-cover"
+            />
+            <div className="flex-1 text-center md:text-left">
+              <h1 className="text-3xl font-bold text-text-heading">{profileData.name}</h1>
+              <p className="text-accent-blue text-lg">@{profileData.username}</p>
+              <p className="text-text-dark mt-1">{profileData.role}</p>
             </div>
-
-            {/* Bio and Info */}
-            <div className="mt-6 space-y-4">
-              <p className="text-slate-700 dark:text-slate-300 max-w-2xl">
-                {profileData.bio}
-              </p>
-
-              <div className="flex flex-wrap gap-4 text-sm text-slate-600 dark:text-slate-400">
-                {profileData.location && (
-                  <div className="flex items-center space-x-1">
-                    <MapPin className="w-4 h-4" />
-                    <span>{profileData.location}</span>
-                  </div>
-                )}
-                {profileData.company && (
-                  <div className="flex items-center space-x-1">
-                    <Briefcase className="w-4 h-4" />
-                    <span>{profileData.company}</span>
-                  </div>
-                )}
-                {profileData.website && (
-                  <div className="flex items-center space-x-1">
-                    <LinkIcon className="w-4 h-4" />
-                    <a href={`https://${profileData.website}`} className="text-blue-600 hover:underline">
-                      {profileData.website}
-                    </a>
-                  </div>
-                )}
-                <div className="flex items-center space-x-1">
-                  <Calendar className="w-4 h-4" />
-                  <span>Joined {profileData.joinedDate}</span>
-                </div>
-              </div>
-
-              {/* Social Links */}
-              <div className="flex space-x-4">
-                {profileData.socialLinks.github && (
-                  <a href={`https://github.com/${profileData.socialLinks.github}`} className="text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 transition-colors">
-                    <Github className="w-5 h-5" />
-                  </a>
-                )}
-                {profileData.socialLinks.twitter && (
-                  <a href={`https://twitter.com/${profileData.socialLinks.twitter}`} className="text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 transition-colors">
-                    <Twitter className="w-5 h-5" />
-                  </a>
-                )}
-                {profileData.socialLinks.linkedin && (
-                  <a href={`https://linkedin.com/in/${profileData.socialLinks.linkedin}`} className="text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 transition-colors">
-                    <Linkedin className="w-5 h-5" />
-                  </a>
-                )}
-                {profileData.socialLinks.email && (
-                  <a href={`mailto:${profileData.socialLinks.email}`} className="text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 transition-colors">
-                    <Mail className="w-5 h-5" />
-                  </a>
-                )}
-              </div>
+            <div className="flex space-x-3">
+              <Button
+                onClick={() => setIsFollowing(!isFollowing)}
+                variant={isFollowing ? "outline" : "primary"}
+              >
+                {isFollowing ? 'Following' : 'Follow'}
+              </Button>
+              <Button variant="outline">Message</Button>
             </div>
-
-            {/* Stats */}
-            <div className="mt-6 flex space-x-8">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{profileData.stats.posts}</div>
-                <div className="text-sm text-slate-600 dark:text-slate-400">Posts</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{profileData.stats.followers}</div>
-                <div className="text-sm text-slate-600 dark:text-slate-400">Followers</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{profileData.stats.following}</div>
-                <div className="text-sm text-slate-600 dark:text-slate-400">Following</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{profileData.stats.projects}</div>
-                <div className="text-sm text-slate-600 dark:text-slate-400">Projects</div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Skills */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="mt-6 bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-6"
-          >
-            <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-4">Skills</h2>
-            <div className="flex flex-wrap gap-2">
-              {profileData.skills.map((skill, index) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-sm"
-                >
-                  {skill}
-                </span>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Tabs */}
-          <div className="mt-6 border-b border-slate-200 dark:border-slate-700">
-            <nav className="flex space-x-8">
-              {['posts', 'projects', 'about'].map((tab) => (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`py-3 px-1 border-b-2 font-medium text-sm capitalize transition-colors ${
-                    activeTab === tab
-                      ? 'border-blue-600 text-blue-600'
-                      : 'border-transparent text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-300'
-                  }`}
-                >
-                  {tab}
-                </button>
-              ))}
-            </nav>
           </div>
 
-          {/* Tab Content */}
-          <motion.div
-            key={activeTab}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mt-6 space-y-6"
-          >
-            {activeTab === 'posts' && (
-              <div className="space-y-6">
-                {posts.map((post) => (
-                  <div key={post.id} className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-6">
-                    <p className="text-slate-700 dark:text-slate-300 mb-4">{post.content}</p>
-                    <div className="flex items-center justify-between text-sm text-slate-500 dark:text-slate-400">
-                      <span>{post.timestamp}</span>
-                      <div className="flex space-x-4">
-                        <span>{post.likes} likes</span>
-                        <span>{post.comments} comments</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+          {/* Bio and Info */}
+          <div className="mt-6">
+            <p className="text-text-light max-w-3xl mx-auto md:mx-0">{profileData.bio}</p>
+            <div className="flex flex-wrap justify-center md:justify-start gap-x-6 gap-y-2 mt-4 text-sm text-text-dark">
+              <div className="flex items-center gap-2"><MapPin size={14} /> {profileData.location}</div>
+              <div className="flex items-center gap-2"><LinkIcon size={14} /> <a href="#" className="hover:text-accent-blue">{profileData.website}</a></div>
+              <div className="flex items-center gap-2"><Calendar size={14} /> Joined {profileData.joinedDate}</div>
+            </div>
+            <div className="flex justify-center md:justify-start space-x-4 mt-4">
+              <a href="#" className="text-text-dark hover:text-accent-blue"><Github size={20} /></a>
+              <a href="#" className="text-text-dark hover:text-accent-blue"><Twitter size={20} /></a>
+              <a href="#" className="text-text-dark hover:text-accent-blue"><Linkedin size={20} /></a>
+            </div>
+          </div>
 
-            {activeTab === 'projects' && (
-              <div className="grid md:grid-cols-2 gap-6">
-                {projects.map((project) => (
-                  <div key={project.id} className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <div>
-                        <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-                          {project.name}
-                        </h3>
-                        <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-                          {project.description}
-                        </p>
-                      </div>
-                      <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded text-xs">
-                        {project.language}
-                      </span>
-                    </div>
-                    <div className="flex items-center space-x-4 text-sm text-slate-500 dark:text-slate-400">
-                      <div className="flex items-center space-x-1">
-                        <Star className="w-4 h-4" />
-                        <span>{project.stars}</span>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        <GitFork className="w-4 h-4" />
-                        <span>{project.forks}</span>
-                      </div>
-                      <a
-                        href={project.url}
-                        className="flex items-center space-x-1 text-blue-600 hover:text-blue-500"
-                      >
-                        <Eye className="w-4 h-4" />
-                        <span>View</span>
-                      </a>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {activeTab === 'about' && (
-              <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm p-6">
-                <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">About</h3>
-                <div className="prose dark:prose-invert max-w-none">
-                  <p className="text-slate-700 dark:text-slate-300">
-                    {profileData.bio}
-                  </p>
-                  <p className="text-slate-700 dark:text-slate-300 mt-4">
-                    I'm passionate about creating scalable web applications and sharing knowledge with the developer community. 
-                    When I'm not coding, you can find me contributing to open source projects or mentoring junior developers.
-                  </p>
+          {/* Stats & XP Bar */}
+          <div className="mt-6 pt-6 border-t border-dark-border flex flex-col md:flex-row items-center gap-8">
+            <div className="flex gap-8">
+              {Object.entries(profileData.stats).map(([key, value]) => (
+                <div key={key} className="text-center">
+                  <div className="text-2xl font-bold text-text-heading">{value}</div>
+                  <div className="text-sm text-text-dark capitalize">{key}</div>
                 </div>
+              ))}
+            </div>
+            <div className="w-full md:flex-1">
+              <div className="flex justify-between items-center mb-1">
+                <span className="text-sm font-bold text-accent-purple">Level {profileData.xp.level}</span>
+                <span className="text-xs text-text-dark">{profileData.xp.current} / {profileData.xp.max} XP</span>
               </div>
-            )}
+              <div className="w-full bg-dark-bg rounded-full h-2.5">
+                 {/* Interactivity Suggestion for Framer Motion:
+                     Animate the width of the progress bar when it comes into view.
+                 */}
+                <motion.div
+                  className="bg-gradient-to-r from-accent-blue to-accent-purple h-2.5 rounded-full"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${(profileData.xp.current / profileData.xp.max) * 100}%` }}
+                  transition={{ duration: 1, ease: "easeOut" }}
+                />
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
+          {/* Left Column (Skills) */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3 }}
+            className="lg:col-span-1 space-y-8"
+          >
+            <div className="glass-card p-6 rounded-2xl">
+              <h2 className="text-xl font-semibold text-text-heading mb-4 flex items-center gap-2"><Award size={18}/> Skills</h2>
+              <div className="flex flex-wrap gap-2">
+                {profileData.skills.map((skill) => (
+                  <span key={skill} className="px-3 py-1 bg-accent-blue/10 text-accent-blue rounded-full text-sm font-medium">{skill}</span>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Right Column (Tabs) */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3 }}
+            className="lg:col-span-2"
+          >
+            <div className="glass-card rounded-2xl">
+              <div className="border-b border-dark-border px-6">
+                <nav className="flex space-x-6">
+                  {['posts', 'projects', 'about'].map((tab) => (
+                    <button
+                      key={tab}
+                      onClick={() => setActiveTab(tab)}
+                      className={`py-4 px-1 relative font-medium text-md capitalize transition-colors ${
+                        activeTab === tab ? 'text-text-heading' : 'text-text-dark hover:text-text-light'
+                      }`}
+                    >
+                      {tab}
+                      {activeTab === tab && (
+                        <motion.div
+                          className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent-blue"
+                          layoutId="underline"
+                        />
+                      )}
+                    </button>
+                  ))}
+                </nav>
+              </div>
+              <div className="p-6">
+                 {/* Interactivity Suggestion for Framer Motion:
+                     Use AnimatePresence to create a smooth transition between tabs,
+                     like a fade or slide effect.
+                 */}
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeTab}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {tabContent[activeTab]}
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </div>
           </motion.div>
         </div>
-      </main>
-    </div>
+      </div>
+    </MainLayout>
   );
 };
 

@@ -8,6 +8,7 @@ import Profile from './pages/Profile';
 import Messages from './pages/Messages';
 import Explore from './pages/Explore';
 import Community from './pages/Community';
+import Settings from './pages/Settings';
 
 // Protected Route component
 const ProtectedRoute = ({ children }) => {
@@ -98,6 +99,14 @@ function AppRoutes() {
             <Community />
           </ProtectedRoute>
         } 
+      />
+      <Route
+        path="/settings"
+        element={
+          <ProtectedRoute>
+            <Settings />
+          </ProtectedRoute>
+        }
       />
     </Routes>
   );

@@ -1,3 +1,5 @@
+import plugin from 'tailwindcss/plugin';
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -8,60 +10,57 @@ export default {
   theme: {
     extend: {
       colors: {
-        border: "#e2e8f0",
-        input: "#e2e8f0",
-        ring: "#3b82f6",
-        background: "#ffffff",
-        foreground: "#0f172a",
-        primary: {
-          DEFAULT: "#3b82f6",
-          foreground: "#ffffff",
+        'dark': {
+          'bg': '#10121A',
+          'card': 'rgba(23, 26, 38, 0.7)',
+          'border': 'rgba(45, 52, 79, 0.8)',
         },
-        secondary: {
-          DEFAULT: "#f1f5f9",
-          foreground: "#0f172a",
+        'accent': {
+          'blue': '#3B82F6',
+          'purple': '#8B5CF6',
+          'pink': '#EC4899',
         },
-        destructive: {
-          DEFAULT: "#ef4444",
-          foreground: "#ffffff",
-        },
-        muted: {
-          DEFAULT: "#f1f5f9",
-          foreground: "#64748b",
-        },
-        accent: {
-          DEFAULT: "#f1f5f9",
-          foreground: "#0f172a",
-        },
-        popover: {
-          DEFAULT: "#ffffff",
-          foreground: "#0f172a",
-        },
-        card: {
-          DEFAULT: "#ffffff",
-          foreground: "#0f172a",
+        'text': {
+          'light': '#E5E7EB',
+          'dark': '#9CA3AF',
+          'heading': '#F9FAFB',
         },
       },
-      borderRadius: {
-        lg: "0.5rem",
-        md: "0.375rem",
-        sm: "0.25rem",
+      boxShadow: {
+        'soft': '0 4px 30px rgba(0, 0, 0, 0.1)',
+        'glow': '0 0 20px rgba(59, 130, 246, 0.25)',
       },
       keyframes: {
-        "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
-        },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
-        },
+        "accordion-down": { from: { height: "0" }, to: { height: "var(--radix-accordion-content-height)" } },
+        "accordion-up": { from: { height: "var(--radix-accordion-content-height)" }, to: { height: "0" } },
+        'fade-in': { '0%': { opacity: '0', transform: 'translateY(10px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        'fade-in': 'fade-in 0.5s ease-out forwards',
       },
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(function({ addUtilities }) {
+      addUtilities({
+        '.glass-card': {
+          'background': 'rgba(23, 26, 38, 0.6)',
+          'backdrop-filter': 'blur(12px)',
+          '-webkit-backdrop-filter': 'blur(12px)',
+          'border': '1px solid rgba(45, 52, 79, 0.7)',
+          'box-shadow': '0 4px 30px rgba(0, 0, 0, 0.1)',
+        },
+        '.glass-hover': {
+          'transition': 'background 0.3s ease, border 0.3s ease, transform 0.3s ease',
+          '&:hover': {
+            'background': 'rgba(28, 32, 46, 0.75)',
+            'border': '1px solid rgba(59, 130, 246, 0.6)',
+            'transform': 'translateY(-2px) scale(1.01)',
+          },
+        },
+      })
+    })
+  ],
 }

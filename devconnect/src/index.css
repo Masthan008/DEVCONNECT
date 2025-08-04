@@ -1,15 +1,44 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
-/* Basic styles */
-body {
-  background-color: #f3f4f6;
-  color: #1f2937;
+@layer base {
+  body {
+    @apply bg-dark-bg text-text-light;
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-text-heading font-bold;
+  }
+
+  /* Style for scrollbars to match the dark theme */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #2D344F;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3B82F6;
+  }
 }
 
-/* Dark mode styles */
-.dark body {
-  background-color: #111827;
-  color: #f9fafb;
-}
+/* Suggestion for Framer Motion / GSAP:
+   Define a root-level animation variant for page transitions.
+   This can be used in a layout component to animate routes.
+   Example:
+   const pageVariants = {
+     initial: { opacity: 0, x: "-100vw" },
+     in: { opacity: 1, x: 0 },
+     out: { opacity: 0, x: "100vw" }
+   };
+*/
